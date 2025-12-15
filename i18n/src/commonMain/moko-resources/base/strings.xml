@@ -249,6 +249,16 @@
     <string name="pref_date_format">Date format</string>
     <string name="pref_display_images_description">Render images in manga descriptions</string>
 
+    <string name="pref_ai_coloring">AI Coloring</string>
+    <string name="pref_ai_coloring_summary">Automatically colorize downloaded black and white manga pages using AI</string>
+    <string name="pref_ai_provider">AI Provider</string>
+    <string name="pref_ai_api_key">API Key</string>
+    <string name="pref_ai_api_key_summary">Paste your API Key here</string>
+    <string name="pref_ai_prompt">Prompt</string>
+    <string name="pref_ai_prompt_summary">Prompt for the AI (e.g. \'vivid colors, anime style\')</string>
+    <string name="pref_ai_style">Style</string>
+    <string name="pref_ai_style_summary">Style preset (e.g. \'default\', \'cyberpunk\')</string>
+
     <string name="pref_manage_notifications">Manage notifications</string>
     <string name="pref_app_language">App language</string>
 

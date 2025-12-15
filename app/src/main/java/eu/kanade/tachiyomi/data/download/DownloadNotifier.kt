@@ -227,4 +227,13 @@ internal class DownloadNotifier(private val context: Context) {
         // Reset download information
         isDownloading = false
     }
+
+    fun onAIError(error: Throwable, chapter: String, mangaTitle: String, mangaId: Long?) {
+        val message = if (error is kotlinx.coroutines.TimeoutCancellationException) {
+            "AI Coloring Timeout"
+        } else {
+            "AI Coloring Failed: ${error.localizedMessage}"
+        }
+        onWarning(message, null, null, mangaId)
+    }
 }

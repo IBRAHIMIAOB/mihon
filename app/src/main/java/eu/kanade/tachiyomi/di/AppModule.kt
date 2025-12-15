@@ -144,5 +144,7 @@ class AppModule(val app: Application) : InjektModule {
 
             get<DownloadManager>()
         }
+
+        addSingletonFactory { tachiyomi.domain.ai.service.AIColoringManager(get()) }
     }
 }

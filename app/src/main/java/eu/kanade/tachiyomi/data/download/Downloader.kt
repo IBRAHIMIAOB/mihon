@@ -53,6 +53,7 @@ import tachiyomi.core.metadata.comicinfo.ComicInfo
 import tachiyomi.domain.category.interactor.GetCategories
 import tachiyomi.domain.chapter.model.Chapter
 import tachiyomi.domain.download.service.DownloadPreferences
+import tachiyomi.domain.ai.service.AIColoringManager
 import tachiyomi.domain.manga.model.Manga
 import tachiyomi.domain.source.service.SourceManager
 import tachiyomi.domain.track.interactor.GetTracks
@@ -61,6 +62,8 @@ import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import java.io.File
 import java.util.Locale
+import kotlinx.coroutines.TimeoutCancellationException
+import kotlinx.coroutines.withTimeout
 
 /**
  * This class is the one in charge of downloading chapters.
@@ -77,6 +80,7 @@ class Downloader(
     private val xml: XML = Injekt.get(),
     private val getCategories: GetCategories = Injekt.get(),
     private val getTracks: GetTracks = Injekt.get(),
+    private val aiColoringManager: AIColoringManager = Injekt.get(),
 ) {
 
     /**
@@ -493,6 +497,36 @@ class Downloader(
                 response.body.source().saveTo(file.openOutputStream())
                 val extension = getImageExtension(response, file)
                 file.renameTo("$filename.$extension")
+
+                // AI Coloring
+                val aiProvider = aiColoringManager.getProvider()
+                if (aiProvider != null) {
+                    try {
+                        val tempFile = File.createTempFile("ai_color_", ".$extension", context.cacheDir)
+                        // Copy UniFile content to TempFile
+                        file.openInputStream().use { input ->
+                            tempFile.outputStream().use { output ->
+                                input.copyTo(output)
+                            }
+                        }
+
+                        withTimeout(60_000L) { // 60s timeout
+                            aiProvider.colorize(tempFile).onSuccess { coloredFile ->
+                                // Write back to UniFile
+                                coloredFile.inputStream().use { input ->
+                                    file.openOutputStream().use { output ->
+                                        input.copyTo(output)
+                                    }
+                                }
+                            }.onFailure { throw it }
+                        }
+                        tempFile.delete()
+                    } catch (e: Exception) {
+                        if (e is CancellationException && e !is TimeoutCancellationException) throw e
+                        logcat(LogPriority.ERROR, e) { "AI Coloring failed" }
+                        notifier.onAIError(e, page.number.toString(), download.manga.title, download.manga.id)
+                    }
+                }
             } catch (e: Exception) {
                 response.close()
                 file.delete()
