@@ -8,12 +8,10 @@ class AIPreferences(
 
     fun aiColoringEnabled() = preferenceStore.getBoolean("ai_coloring_enabled", false)
 
-    fun aiProvider() = preferenceStore.getString("ai_provider", "nanobanana")
-
     // General AI preferences 
     fun aiApiKey() = preferenceStore.getString("ai_api_key", "")
 
-    fun aiModel() = preferenceStore.getString("ai_model", "gemini-2.5-flash-image")
+    fun aiModel() = preferenceStore.getString("ai_model", "google/gemini-3-pro-image-preview")
 
     fun aiPrompt() = preferenceStore.getString("ai_prompt", "")
 

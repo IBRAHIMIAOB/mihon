@@ -15,7 +15,6 @@ import tachiyomi.i18n.MR
 import tachiyomi.presentation.core.i18n.stringResource
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
-import tachiyomi.domain.ai.service.GoogleProvider
 import tachiyomi.domain.ai.service.AIPromptBuilder
 
 object SettingsAIScreen : SearchableSettings {
@@ -28,10 +27,9 @@ object SettingsAIScreen : SearchableSettings {
     override fun getPreferences(): List<Preference> {
         val aiPreferences = remember { Injekt.get<AIPreferences>() }
 
-
         return listOf(
             getGeneralGroup(aiPreferences),
-            getProviderGroup(aiPreferences)
+            getSettingsGroup(aiPreferences)
         )
     }
 
@@ -44,39 +42,22 @@ object SettingsAIScreen : SearchableSettings {
                     preference = aiPreferences.aiColoringEnabled(),
                     title = stringResource(MR.strings.pref_ai_coloring),
                     subtitle = stringResource(MR.strings.pref_ai_coloring_summary)
-                ),
-                Preference.PreferenceItem.ListPreference(
-                    preference = aiPreferences.aiProvider(),
-                    entries = persistentMapOf(
-                        "google" to "Google (Gemini)",
-                        "openai" to "OpenAI",
-                        "grok" to "Grok"
-                    ),
-                    title = stringResource(MR.strings.pref_ai_provider)
                 )
             )
         )
     }
 
     @Composable
-    private fun getProviderGroup(aiPreferences: AIPreferences): Preference.PreferenceGroup {
-        val provider by aiPreferences.aiProvider().collectAsState()
+    private fun getSettingsGroup(aiPreferences: AIPreferences): Preference.PreferenceGroup {
         val textAction by aiPreferences.aiTextAction().collectAsState()
-
-        val models = when (provider) {
-            "google", "nanobanana" -> GoogleProvider.SUPPORTED_MODELS.associateWith { it }
-            "openai" -> mapOf("gpt-4o" to "GPT-4o", "gpt-4-turbo" to "GPT-4 Turbo")
-            "grok" -> mapOf("grok-beta" to "Grok Beta")
-            else -> emptyMap()
-        }.toPersistentMap()
 
         val styles = AIPromptBuilder.STYLES.keys.associateWith { it }.toPersistentMap()
 
         val baseItems: PersistentList<Preference.PreferenceItem<out Any, out Any>> = persistentListOf(
-                Preference.PreferenceItem.ListPreference(
+                Preference.PreferenceItem.EditTextPreference(
                     preference = aiPreferences.aiModel(),
-                    entries = models,
                     title = stringResource(MR.strings.pref_ai_model),
+                    subtitle = "OpenRouter Image Gen Model ID (e.g. google/gemini-pro-1.5)"
                 ),
                 Preference.PreferenceItem.ListPreference(
                     preference = aiPreferences.aiStyle(),
@@ -123,12 +104,7 @@ object SettingsAIScreen : SearchableSettings {
         )
 
         return Preference.PreferenceGroup(
-            title = when (provider) {
-                "google", "nanobanana" -> "Google (Gemini) Settings"
-                "openai" -> "OpenAI Settings"
-                "grok" -> "Grok Settings"
-                else -> "AI Provider Settings"
-            },
+            title = "OpenRouter Settings",
             preferenceItems = items.build()
         )
     }

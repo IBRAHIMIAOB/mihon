@@ -799,9 +799,6 @@ class ReaderActivity : BaseActivity() {
                 toast(MR.strings.colorize_failed)
                 logcat(LogPriority.ERROR, result.error)
             }
-            is ReaderViewModel.ColorizeResult.NoProvider -> {
-                toast(MR.strings.colorize_no_provider)
-            }
         }
     }
 

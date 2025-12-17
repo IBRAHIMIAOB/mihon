@@ -380,6 +380,7 @@ class Downloader(
                         page.status = Page.State.LoadPage
                         try {
                             page.imageUrl = download.source.getImageUrl(page)
+                            logcat { "TEMP_LOG: Fetched image URL for page ${page.number}: ${page.imageUrl}" }
                         } catch (e: Throwable) {
                             page.status = Page.State.Error(e)
                         }
@@ -423,7 +424,7 @@ class Downloader(
         } catch (error: Throwable) {
             if (error is CancellationException) throw error
             // If the page list threw, it will resume here
-            logcat(LogPriority.ERROR, error)
+            logcat(LogPriority.ERROR, error) { "TEMP_LOG: Error downloading chapter ${download.chapter.name}" }
             download.status = Download.State.ERROR
             notifier.onError(error.message, download.chapter.name, download.manga.title, download.manga.id)
         }
@@ -491,16 +492,40 @@ class Downloader(
         page.status = Page.State.DownloadImage
         page.progress = 0
         return flow {
+            logcat { "TEMP_LOG: Downloading image for page ${page.number} from ${page.imageUrl}" }
             val response = download.source.getImage(page)
             val file = tmpDir.createFile("$filename.tmp")!!
             try {
                 response.body.source().saveTo(file.openOutputStream())
-                val extension = getImageExtension(response, file)
+                
+                var extension = getImageExtension(response, file)
+                
+                // FORCE WEBP TO JPG CONVERSION
+                if (extension.equals("webp", ignoreCase = true)) {
+                    try {
+                        logcat { "TEMP_LOG: Converting WEBP to JPG for page ${page.number}" }
+                        val bitmap = android.graphics.BitmapFactory.decodeStream(file.openInputStream())
+                        if (bitmap != null) {
+                            file.delete()
+                            val jpgFile = tmpDir.createFile("$filename.tmp")!!
+                            jpgFile.openOutputStream().use { output ->
+                                bitmap.compress(android.graphics.Bitmap.CompressFormat.JPEG, 90, output)
+                            }
+                            extension = "jpg"
+                        } else {
+                            logcat(LogPriority.ERROR) { "TEMP_LOG: Failed to decode WEBP bitmap" }
+                        }
+                    } catch (e: Exception) {
+                         logcat(LogPriority.ERROR, e) { "TEMP_LOG: Failed to convert WEBP to JPG" }
+                    }
+                }
+
                 file.renameTo("$filename.$extension")
+                logcat { "TEMP_LOG: Saved image as $filename.$extension" }
 
                 // AI Coloring
-                val aiProvider = aiColoringManager.getProvider()
-                if (aiProvider != null) {
+                // AI Coloring
+                if (aiColoringManager.isEnabled()) {
                     try {
                         val tempFile = File.createTempFile("ai_color_", ".$extension", context.cacheDir)
                         // Copy UniFile content to TempFile
@@ -511,7 +536,7 @@ class Downloader(
                         }
 
                         withTimeout(60_000L) { // 60s timeout
-                            aiProvider.colorize(tempFile).onSuccess { coloredFile ->
+                            aiColoringManager.colorize(tempFile).onSuccess { coloredFile ->
                                 // Write back to UniFile
                                 coloredFile.inputStream().use { input ->
                                     file.openOutputStream().use { output ->

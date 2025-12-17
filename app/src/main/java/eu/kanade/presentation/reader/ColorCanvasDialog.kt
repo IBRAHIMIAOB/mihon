@@ -63,6 +63,8 @@ import coil3.compose.AsyncImage
 import tachiyomi.i18n.MR
 import tachiyomi.presentation.core.i18n.stringResource
 
+import tachiyomi.core.common.util.system.logcat
+
 data class DrawPath(
     val path: Path,
     val color: Color,
@@ -112,6 +114,7 @@ fun ColorCanvasDialog(
                     .fillMaxSize()
                     .padding(16.dp),
             ) {
+                logcat { "TEMP_LOG: ColorCanvasDialog Composed" }
                 // Top bar with title and close button
                 Row(
                     modifier = Modifier.fillMaxWidth(),

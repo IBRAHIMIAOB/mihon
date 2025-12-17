@@ -908,6 +908,7 @@ class ReaderViewModel @JvmOverloads constructor(
         val page = (state.value.dialog as? Dialog.PageActions)?.page
         if (page?.status != Page.State.Ready) return
         
+        logcat { "TEMP_LOG: Opening ColorCanvasDialog for page ${page.number}" }
         mutableState.update { it.copy(dialog = Dialog.ColorCanvas(page)) }
     }
 
@@ -938,13 +939,6 @@ class ReaderViewModel @JvmOverloads constructor(
 
         viewModelScope.launchNonCancellable {
             try {
-                val provider = aiColoringManager.getProvider()
-                if (provider == null) {
-                    eventChannel.send(Event.ColorizedImage(ColorizeResult.NoProvider))
-                    mutableState.update { it.copy(dialog = null) }
-                    return@launchNonCancellable
-                }
-
                 // Create temp file from annotated bitmap
                 val tempFile = withIOContext {
                     val file = File.createTempFile("colorize_", ".jpg", context.cacheDir)
@@ -957,7 +951,7 @@ class ReaderViewModel @JvmOverloads constructor(
                 // Colorize with timeout
                 val colorizedResult = withIOContext {
                     withTimeout(120_000L) { // 2 minute timeout
-                        provider.colorize(tempFile)
+                        aiColoringManager.colorize(tempFile)
                     }
                 }
 
@@ -1006,7 +1000,6 @@ class ReaderViewModel @JvmOverloads constructor(
     sealed interface ColorizeResult {
         class Success(val uri: Uri) : ColorizeResult
         class Error(val error: Throwable) : ColorizeResult
-        data object NoProvider : ColorizeResult
     }
 
     /**
