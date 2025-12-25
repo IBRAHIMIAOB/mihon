@@ -21,7 +21,7 @@ object SettingsAIScreen : SearchableSettings {
 
     @ReadOnlyComposable
     @Composable
-    override fun getTitleRes() = MR.strings.pref_ai_coloring // Need to add string
+    override fun getTitleRes() = MR.strings.pref_ai_enhancements
 
     @Composable
     override fun getPreferences(): List<Preference> {
@@ -36,12 +36,12 @@ object SettingsAIScreen : SearchableSettings {
     @Composable
     private fun getGeneralGroup(aiPreferences: AIPreferences): Preference.PreferenceGroup {
         return Preference.PreferenceGroup(
-            title = stringResource(MR.strings.pref_ai_coloring),
+            title = stringResource(MR.strings.pref_ai_enhancements),
             preferenceItems = persistentListOf(
                 Preference.PreferenceItem.SwitchPreference(
-                    preference = aiPreferences.aiColoringEnabled(),
-                    title = stringResource(MR.strings.pref_ai_coloring),
-                    subtitle = stringResource(MR.strings.pref_ai_coloring_summary)
+                    preference = aiPreferences.aiEnhancementsEnabled(),
+                    title = stringResource(MR.strings.pref_ai_enhancements),
+                    subtitle = stringResource(MR.strings.pref_ai_enhancements_summary)
                 )
             )
         )

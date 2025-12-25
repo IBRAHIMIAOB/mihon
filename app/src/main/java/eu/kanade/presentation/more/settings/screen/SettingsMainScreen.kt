@@ -198,8 +198,8 @@ object SettingsMainScreen : Screen() {
             screen = SettingsDownloadScreen,
         ),
         Item(
-            titleRes = MR.strings.pref_ai_coloring,
-            subtitleRes = MR.strings.pref_ai_coloring_summary,
+            titleRes = MR.strings.pref_ai_enhancements,
+            subtitleRes = MR.strings.pref_ai_enhancements_summary,
             icon = Icons.Outlined.Brush,
             screen = SettingsAIScreen,
         ),

@@ -6,7 +6,7 @@ class AIPreferences(
     private val preferenceStore: PreferenceStore,
 ) {
 
-    fun aiColoringEnabled() = preferenceStore.getBoolean("ai_coloring_enabled", false)
+    fun aiEnhancementsEnabled() = preferenceStore.getBoolean("ai_enhancements_enabled", false)
 
     // General AI preferences 
     fun aiApiKey() = preferenceStore.getString("ai_api_key", "")

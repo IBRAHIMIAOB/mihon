@@ -19,7 +19,7 @@ import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import java.io.IOException
 
-class AIColoringManager(
+class AIEnhancementManager(
     private val preferences: AIPreferences
 ) {
 
@@ -32,10 +32,10 @@ class AIColoringManager(
     private val json = Json { ignoreUnknownKeys = true }
 
     fun isEnabled(): Boolean {
-        return preferences.aiColoringEnabled().get()
+        return preferences.aiEnhancementsEnabled().get()
     }
 
-    suspend fun colorize(image: File, customPrompt: String? = null): Result<File> {
+    suspend fun enhanceImage(image: File, customPrompt: String? = null): Result<File> {
         val apiKey = preferences.aiApiKey().get()
         if (apiKey.isBlank()) {
             return Result.failure(Exception("API Key is missing"))
@@ -154,7 +154,7 @@ class AIColoringManager(
                 val imageBytes = Base64.decode(base64Data, Base64.DEFAULT)
                 
                 val outputDir = image.parentFile
-                val outputFile = File(outputDir, "colored_${image.name}")
+                val outputFile = File(outputDir, "enhanced_${image.name}")
                 outputFile.writeBytes(imageBytes)
                 
                 return Result.success(outputFile)

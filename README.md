@@ -4,10 +4,10 @@
     <img src="./.github/assets/logo.png" alt="Mihon logo" title="Mihon logo" width="80"/>
 </a>
 
-# Mihon AI Fork
+# Mihon AI
 
-### Full-featured reader with AI Features
-This is a customized fork of [Mihon](https://github.com/mihonapp/mihon) that adds the ability to Color manga panels and more using AI.
+### Full-featured reader with AI Enhancements
+This is a customized fork of [Mihon](https://github.com/mihonapp/mihon) that adds the ability to Enhance manga panels (Color, Translate, Clean) using AI.
 
 [![Discord server](https://img.shields.io/discord/1195734228319617024.svg?label=&labelColor=6A7EC2&color=7389D8&logo=discord&logoColor=FFFFFF)](https://discord.gg/mihon)
 <!-- [![GitHub downloads](https://img.shields.io/github/downloads/mihonapp/mihon/total?label=downloads&labelColor=27303D&color=0D1117&logo=github&logoColor=FFFFFF&style=flat)](https://mihon.app/download) -->
@@ -18,7 +18,7 @@ This is a customized fork of [Mihon](https://github.com/mihonapp/mihon) that add
 
 ## Download
 
-[Download](https://github.com/IBRAHIMIAOB/mihon-AI-coloring/releases/tag/Dev)
+[Download](https://github.com/IBRAHIMIAOB/Mihon-AI/releases/tag/Dev)
 
 <!--
 [![Mihon Stable](https://img.shields.io/github/release/mihonapp/mihon.svg?maxAge=3600&label=Stable&labelColor=06599d&color=043b69)](https://mihon.app/download)
@@ -29,9 +29,9 @@ This is a customized fork of [Mihon](https://github.com/mihonapp/mihon) that add
 
 </div>
 
-## Mihon AI Coloring
+## Mihon AI Enhancements
 
-This specialized fork of Mihon is dedicated to integrating AI-powered features, primarily focusing on **AI Coloring** for manga panels.
+This specialized fork of Mihon is dedicated to integrating AI-powered features, primarily focusing on **AI Enhancements** for manga panels.
 
 **Our Goal:** We encourage the community to test, develop, and refine these features so they can eventually be merged into the main [Mihon app](https://github.com/mihonapp/mihon).
 
@@ -49,25 +49,25 @@ To get the best results, we recommend using the following Gemini models via Open
 
 ### How to Use
 
-To use the AI coloring features, follow these steps:
+To use the AI enhancement features, follow these steps:
 
 1.  **Get an API Key**: Obtain an API key from [OpenRouter](https://openrouter.ai/settings/keys).
 2.  **Add Credits**: Ensure you have added credits to your OpenRouter account.
 3.  **Configure in App**:
-    - Go to **Settings > AI Coloring**.
+    - Go to **Settings > AI Enhancements**.
     - Enter your **API Key**.
-    - Enable **AI Coloring**.
+    - Enable **AI Enhancements**.
     - Enter a **Model ID** from the list above.
-4.  **Coloring Methods**:
+4.  **Enhancement Methods**:
 
-    **Method A: Automatic Chapter Coloring (Bulk)**
-    - Download a chapter with **AI Coloring** enabled in settings.
-    - The entire chapter will be colored during the download process.
+    **Method A: Automatic Chapter Enhancement (Bulk)**
+    - Download a chapter with **AI Enhancements** enabled in settings.
+    - The entire chapter will be enhanced during the download process.
     - *Note: This applies coloring to all pages automatically without individual guidelines.*
 
-    **Method B: Individual Panel Coloring (Guided)**
+    **Method B: Individual Panel Enhancement (Guided)**
     - Long-press a panel or open the menu while reading.
-    - Select **AI Coloring** for the specific panel.
+    - Select **AI Enhance** for the specific panel.
     - You can provide **guidelines** (scribbles/lines) to direct the AI on how to color specific areas (e.g., hair color, clothes).
     - This allows for higher consistency and control.
 

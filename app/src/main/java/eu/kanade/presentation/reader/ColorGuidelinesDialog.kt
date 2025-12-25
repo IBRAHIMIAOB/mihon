@@ -72,7 +72,7 @@ data class DrawPath(
 )
 
 @Composable
-fun ColorCanvasDialog(
+fun ColorGuidelinesDialog(
     pageImageBitmap: ImageBitmap?,
     onDismiss: () -> Unit,
     onConfirm: (Bitmap) -> Unit,
@@ -114,7 +114,7 @@ fun ColorCanvasDialog(
                     .fillMaxSize()
                     .padding(16.dp),
             ) {
-                logcat { "TEMP_LOG: ColorCanvasDialog Composed" }
+                logcat { "TEMP_LOG: ColorGuidelinesDialog Composed" }
                 // Top bar with title and close button
                 Row(
                     modifier = Modifier.fillMaxWidth(),
@@ -122,7 +122,7 @@ fun ColorCanvasDialog(
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
                     Text(
-                        text = stringResource(MR.strings.color_canvas_title),
+                        text = stringResource(MR.strings.ai_guidelines_title),
                         style = MaterialTheme.typography.titleLarge,
                     )
                     IconButton(onClick = onDismiss) {
@@ -246,10 +246,10 @@ fun ColorCanvasDialog(
                     ) {
                         Icon(Icons.Default.Delete, contentDescription = null)
                         Spacer(modifier = Modifier.width(8.dp))
-                        Text(stringResource(MR.strings.color_canvas_clear))
+                        Text(stringResource(MR.strings.ai_guidelines_clear))
                     }
                     
-                    // Colorize button
+                    // Enhance button
                     Button(
                         onClick = {
                             if (pageImageBitmap != null && canvasSize.width > 0 && canvasSize.height > 0) {
@@ -264,7 +264,7 @@ fun ColorCanvasDialog(
                     ) {
                         Icon(Icons.Default.Check, contentDescription = null)
                         Spacer(modifier = Modifier.width(8.dp))
-                        Text(stringResource(MR.strings.color_canvas_confirm))
+                        Text(stringResource(MR.strings.ai_guidelines_confirm))
                     }
                 }
             }

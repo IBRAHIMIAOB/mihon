@@ -32,7 +32,7 @@ fun ReaderPageActionsDialog(
     onSetAsCover: () -> Unit,
     onShare: (Boolean) -> Unit,
     onSave: () -> Unit,
-    onColorize: (() -> Unit)? = null,
+    onAiEnhance: (() -> Unit)? = null,
 ) {
     var showSetCoverDialog by remember { mutableStateOf(false) }
 
@@ -74,13 +74,13 @@ fun ReaderPageActionsDialog(
                     onDismissRequest()
                 },
             )
-            if (onColorize != null) {
+            if (onAiEnhance != null) {
                 ActionButton(
                     modifier = Modifier.weight(1f),
-                    title = stringResource(MR.strings.action_colorize),
+                    title = stringResource(MR.strings.action_ai_enhance),
                     icon = Icons.Outlined.ColorLens,
                     onClick = {
-                        onColorize()
+                        onAiEnhance()
                         onDismissRequest()
                     },
                 )

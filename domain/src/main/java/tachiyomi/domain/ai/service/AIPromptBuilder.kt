@@ -30,10 +30,10 @@ object AIPromptBuilder {
         return """
             **$textActionInstruction**
 
-            You are a professional coloring agent specialized in manga panel rendering. Your task is to color the provided black and white image panel with extreme precision.
+            You are a professional image enhancement agent specialized in manga panel rendering. Your task is to enhance/color the provided black and white image panel with extreme precision.
 
             You have to follow the following instructions strictly:
-            1.  **Rendering Style:** Color this panel using the **$styleName** style.
+            1.  **Rendering Style:** Enhance/Color this panel using the **$styleName** style.
             2.  **Style Depiction:** Adhere to the following artistic description: **$styleDescription**
             3.  **Core Constraint:** **DO NOT** change the original line-work of the image.
             4.  **Content Constraint:** **DO NOT** add, remove, or alter any elements, objects, or characters in the image.

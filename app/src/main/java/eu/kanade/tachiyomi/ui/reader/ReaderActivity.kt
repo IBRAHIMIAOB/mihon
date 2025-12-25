@@ -53,7 +53,7 @@ import eu.kanade.presentation.reader.DisplayRefreshHost
 import eu.kanade.presentation.reader.OrientationSelectDialog
 import eu.kanade.presentation.reader.ReaderContentOverlay
 import eu.kanade.presentation.reader.ReaderPageActionsDialog
-import eu.kanade.presentation.reader.ColorCanvasDialog
+import eu.kanade.presentation.reader.ColorGuidelinesDialog
 import eu.kanade.presentation.reader.ReaderPageIndicator
 import eu.kanade.presentation.reader.ReadingModeSelectDialog
 import eu.kanade.presentation.reader.appbars.ReaderAppBars
@@ -243,8 +243,8 @@ class ReaderActivity : BaseActivity() {
                     is ReaderViewModel.Event.SetCoverResult -> {
                         onSetAsCoverResult(event.result)
                     }
-                    is ReaderViewModel.Event.ColorizedImage -> {
-                        onColorizeResult(event.result)
+                    is ReaderViewModel.Event.EnhancedImage -> {
+                        onEnhanceResult(event.result)
                     }
                 }
             }
@@ -332,21 +332,21 @@ class ReaderActivity : BaseActivity() {
                     onSetAsCover = viewModel::setAsCover,
                     onShare = viewModel::shareImage,
                     onSave = viewModel::saveImage,
-                    onColorize = viewModel::openColorCanvas,
+                    onAiEnhance = viewModel::openAiGuidelines,
                 )
             }
-            is ReaderViewModel.Dialog.ColorCanvas -> {
+            is ReaderViewModel.Dialog.AiGuidelines -> {
                 val page = dialog.page
                 val pageBitmap = remember(page) {
                     page.stream?.invoke()?.use { stream ->
                         android.graphics.BitmapFactory.decodeStream(stream)?.asImageBitmap()
                     }
                 }
-                ColorCanvasDialog(
+                ColorGuidelinesDialog(
                     pageImageBitmap = pageBitmap,
                     onDismiss = onDismissRequest,
                     onConfirm = { bitmap ->
-                        viewModel.colorizeWithBitmap(bitmap)
+                        viewModel.enhanceWithGuidelines(bitmap)
                     },
                 )
             }
@@ -788,15 +788,15 @@ class ReaderActivity : BaseActivity() {
     }
 
     /**
-     * Called from the presenter when a page is colorized or fails.
+     * Called from the presenter when a page is enhanced or fails.
      */
-    private fun onColorizeResult(result: ReaderViewModel.ColorizeResult) {
+    private fun onEnhanceResult(result: ReaderViewModel.EnhanceResult) {
         when (result) {
-            is ReaderViewModel.ColorizeResult.Success -> {
-                toast(MR.strings.colorize_success)
+            is ReaderViewModel.EnhanceResult.Success -> {
+                toast(MR.strings.enhance_success)
             }
-            is ReaderViewModel.ColorizeResult.Error -> {
-                toast(MR.strings.colorize_failed)
+            is ReaderViewModel.EnhanceResult.Error -> {
+                toast(MR.strings.enhance_failed)
                 logcat(LogPriority.ERROR, result.error)
             }
         }

@@ -153,10 +153,10 @@
     <string name="action_install">Install</string>
     <string name="action_share">Share</string>
     <string name="action_save">Save</string>
-    <string name="action_colorize">Colorize</string>
-    <string name="color_canvas_title">Draw color guidelines</string>
-    <string name="color_canvas_confirm">Colorize</string>
-    <string name="color_canvas_clear">Clear</string>
+    <string name="action_ai_enhance">AI Enhance</string>
+    <string name="ai_guidelines_title">AI Color Guidelines</string>
+    <string name="ai_guidelines_confirm">Enhance</string>
+    <string name="ai_guidelines_clear">Clear</string>
     <string name="action_reset">Reset</string>
     <string name="action_revert_to_default">Revert to default</string>
     <!-- missing undo feature after Compose rewrite #7454 -->
@@ -253,8 +253,8 @@
     <string name="pref_date_format">Date format</string>
     <string name="pref_display_images_description">Render images in manga descriptions</string>
 
-    <string name="pref_ai_coloring">AI Coloring</string>
-    <string name="pref_ai_coloring_summary">Automatically colorize downloaded black and white manga pages using AI</string>
+    <string name="pref_ai_enhancements">AI Enhancements</string>
+    <string name="pref_ai_enhancements_summary">Enhance reading experience with AI-powered colorization, translation, and text cleanup</string>
     <string name="pref_ai_provider">AI Provider</string>
     <string name="pref_ai_api_key">API Key</string>
     <string name="pref_ai_api_key_summary">Paste your API Key here</string>
@@ -262,10 +262,10 @@
     <string name="pref_ai_prompt_summary">Prompt for the AI (e.g. \'vivid colors, anime style\')</string>
     <string name="pref_ai_style">Style</string>
     <string name="pref_ai_style_summary">Style preset (e.g. \'default\', \'cyberpunk\')</string>
-    <string name="colorizing_image">Colorizing image…</string>
-    <string name="colorize_success">Image colorized and saved</string>
-    <string name="colorize_failed">Failed to colorize image</string>
-    <string name="colorize_no_provider">AI coloring is not enabled</string>
+    <string name="enhancing_image">Enhancing image…</string>
+    <string name="enhance_success">Image enhanced and saved</string>
+    <string name="enhance_failed">Failed to enhance image</string>
+    <string name="enhance_no_provider">AI enhancements are not enabled</string>
     
     <string name="pref_ai_model">Model</string>
     <string name="pref_ai_text_action">Text Action</string>

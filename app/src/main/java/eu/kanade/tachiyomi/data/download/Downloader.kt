@@ -53,7 +53,7 @@ import tachiyomi.core.metadata.comicinfo.ComicInfo
 import tachiyomi.domain.category.interactor.GetCategories
 import tachiyomi.domain.chapter.model.Chapter
 import tachiyomi.domain.download.service.DownloadPreferences
-import tachiyomi.domain.ai.service.AIColoringManager
+import tachiyomi.domain.ai.service.AIEnhancementManager
 import tachiyomi.domain.manga.model.Manga
 import tachiyomi.domain.source.service.SourceManager
 import tachiyomi.domain.track.interactor.GetTracks
@@ -80,7 +80,7 @@ class Downloader(
     private val xml: XML = Injekt.get(),
     private val getCategories: GetCategories = Injekt.get(),
     private val getTracks: GetTracks = Injekt.get(),
-    private val aiColoringManager: AIColoringManager = Injekt.get(),
+    private val aiEnhancementManager: AIEnhancementManager = Injekt.get(),
 ) {
 
     /**
@@ -503,10 +503,10 @@ class Downloader(
                 // FORCE WEBP TO JPG CONVERSION REMOVED
                 // if (extension.equals("webp", ignoreCase = true)) { ... }
 
-                // AI Coloring
-                if (aiColoringManager.isEnabled()) {
+                // AI Enhancements
+                if (aiEnhancementManager.isEnabled()) {
                     try {
-                        val tempFile = File.createTempFile("ai_color_", ".$extension", context.cacheDir)
+                        val tempFile = File.createTempFile("ai_enhance_", ".$extension", context.cacheDir)
                         // Copy UniFile content to TempFile
                         file.openInputStream().use { input ->
                             tempFile.outputStream().use { output ->
@@ -515,13 +515,13 @@ class Downloader(
                         }
 
                         withTimeout(60_000L) { // 60s timeout
-                            aiColoringManager.colorize(tempFile).onSuccess { coloredFile ->
+                            aiEnhancementManager.enhanceImage(tempFile).onSuccess { enhancedFile ->
                                 var neededConversion = false
                                 if (extension.equals("webp", ignoreCase = true)) {
-                                    val type = coloredFile.inputStream().use { ImageUtil.findImageType(it) }
+                                    val type = enhancedFile.inputStream().use { ImageUtil.findImageType(it) }
                                     if (type != null && type.extension != "webp") {
                                         try {
-                                            val bitmap = android.graphics.BitmapFactory.decodeFile(coloredFile.absolutePath)
+                                            val bitmap = android.graphics.BitmapFactory.decodeFile(enhancedFile.absolutePath)
                                             if (bitmap != null) {
                                                 file.openOutputStream().use { output ->
                                                     if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.R) {
@@ -540,7 +540,7 @@ class Downloader(
 
                                 if (!neededConversion) {
                                     // Write back to UniFile
-                                    coloredFile.inputStream().use { input ->
+                                    enhancedFile.inputStream().use { input ->
                                         file.openOutputStream().use { output ->
                                             input.copyTo(output)
                                         }
@@ -551,7 +551,7 @@ class Downloader(
                         tempFile.delete()
                     } catch (e: Exception) {
                         if (e is CancellationException && e !is TimeoutCancellationException) throw e
-                        logcat(LogPriority.ERROR, e) { "AI Coloring failed" }
+                        logcat(LogPriority.ERROR, e) { "AI Enhancement failed" }
                         notifier.onAIError(e, page.number.toString(), download.manga.title, download.manga.id)
                     }
                 }
